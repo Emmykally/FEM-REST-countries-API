@@ -695,11 +695,6 @@ video {
   background-color: hsl(0 0% 52% / var(--tw-bg-opacity));
 }
 
-.object-cover{
-  -o-object-fit: cover;
-     object-fit: cover;
-}
-
 .p-2{
   padding: 0.5rem;
 }
@@ -825,16 +820,6 @@ video {
   }
 
   .dark-text{
-    --tw-text-opacity: 1;
-    color: hsl(0 0% 100% / var(--tw-text-opacity));
-  }
-
-  .dark\:bg-dbb{
-    --tw-bg-opacity: 1;
-    background-color: hsl(207 26% 17% / var(--tw-bg-opacity));
-  }
-
-  .dark\:text-dmtlme{
     --tw-text-opacity: 1;
     color: hsl(0 0% 100% / var(--tw-text-opacity));
   }

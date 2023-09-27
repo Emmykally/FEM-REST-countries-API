@@ -8,6 +8,155 @@ const flagDisplaySection = document.querySelector('#flag-display');
 const filterRegion = document.querySelector('#filter');
 const darkBtn = document.querySelector('#dark-mode');
 const headerText = document.querySelector('#header-text');
+const detailsContainer = document.querySelector('#country-details');
+
+// COUNTRY HTML
+const renderHtml = function (country) {
+  const html = `<div class=" shadow-xl w-full md:w-64 pb-8 bg-dmtlme" data-country-name="${
+    country.name.common
+  }">
+  <div class="w-full h-3/5">
+    <img src="${country.flags.png}" alt="country flag" class="w-full h-full" />
+  </div>
+
+  <h3 class="country py-3 text-xl font-extrabold pl-4">${
+    country.name.common
+  }</h3>
+  <p class="font-bold pl-4">
+    Population: <span class="font-normal">${country.population.toLocaleString()}</span>
+  </p>
+  <p class="font-bold pl-4">
+    Region: <span class="font-normal">${country.region}</span>
+  </p>
+  <p class="font-bold pl-4">
+    Capital: <span class="font-normal">${country.capital}</span>
+  </p>
+</div>`;
+  countryContainer.insertAdjacentHTML('beforeend', html);
+
+  const countryBox = countryContainer.querySelector(
+    `[data-country-name="${country.name.common}"]`
+  );
+  countryBox.addEventListener('click', function (e) {
+    const clickedCountryName = countryBox.getAttribute('data-country-name');
+    console.log(clickedCountryName);
+    clickedCountryBox(clickedCountryName);
+  });
+};
+
+const clickedCountryBox = async function (countryName) {
+  try {
+    const response = await fetch(
+      `https://restcountries.com/v3.1/name/${countryName}`
+    );
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    const [data] = await response.json();
+
+    //  function to dynamically get the native name
+    function getOfficialNativeName(native) {
+      const langCodes = Object.keys(native.nativeName);
+      const langCode = langCodes[0]; // Get the first language code
+
+      return langCode ? native.nativeName[langCode].official : null;
+    }
+    // function getOfficialNativeName(native) {
+    //   for (const langCode in native.nativeName) {
+    //     if (native.nativeName.hasOwnProperty(langCode)) {
+    //       return native.nativeName[langCode].official;
+    //     }
+    //   }
+    //   return null; // Return null if no official name is found
+    // }
+
+    //GET COUNTRIES CURRENCY
+    const officialNativeName = getOfficialNativeName(data.name);
+    function getCurrency(money) {
+      const currency = Object.keys(money.currencies);
+      const countryCurrency = currency;
+      return countryCurrency ? money.currencies[countryCurrency].name : null;
+    }
+    const officialCurrencyName = getCurrency(data);
+    const html = `
+    <div>
+          <button class="px-8 py-1 bg-lmi mb-4" id="back-button">Back</button>
+
+          <div class="flex md:flex-row flex-col items-center">
+            <div class="w-full md:w-1/2">
+              <img
+                src="${data.flags.png}"
+                alt="country flag"
+                class="w-full h-2/3"
+              />
+            </div>
+            <div class="h-1/2">
+              <h3 class="py-3 text-4xl font-extrabold md:pl-4">${
+                data.name.common
+              }</h3>
+
+              <div class="flex md:flex-row flex-col justify-center">
+                <div>
+                  <p class="font-bold md:pl-4 py-2 md:py-1">
+                    Native Name: <span class="font-normal">${officialNativeName}</span>
+                  </p>
+                  <p class="font-bold md:pl-4 py-2 md:py-1">
+                    Population: <span class="font-normal">${data.population.toLocaleString()}</span>
+                  </p>
+                  <p class="font-bold md:pl-4 py-2 md:py-1">
+                    Region: <span class="font-normal">${data.region}</span>
+                  </p>
+                  <p class="font-bold md:pl-4 py-2 md:py-1">
+                    Sub Region: <span class="font-normal">${
+                      data.subregion
+                    }</span>
+                  </p>
+                  <p class="font-bold md:pl-4 py-2 md:py-1">
+                    Capital: <span class="font-normal">${data.capital}</span>
+                  </p>
+                </div>
+                <div class="mt-8 md:mt-0">
+                  <p class="font-bold md:pl-4 py-2 md:py-1">
+                    Top Level Domain: <span class="font-normal">${
+                      data.tld
+                    }</span>
+                  </p>
+                  <p class="font-bold md:pl-4 py-2 md:py-1">
+                    Currencies: <span class="font-normal">${officialCurrencyName}</span>
+                  </p>
+                  <p class="font-bold md:pl-4 py-2 md:py-1">
+                    Languages:
+                    <span class="font-normal">${data.languages}</span>
+                  </p>
+                </div>
+              </div>
+              <div class="flex md:flex-row flex-col mt-8 md:mt-16">
+                <div>
+                  <p class="font-bold md:pl-4">Border Countries:</p>
+                </div>
+
+                <div class="flex">
+                  <p class="font-normal px-4 py-1 shadow-lg cursor-pointer">
+                    
+                  </p>
+                  <p class="font-normal px-4 py-1 shadow-lg cursor-pointer">
+                  
+                  </p>
+                  <p class="font-normal px-4 py-1 shadow-lg cursor-pointer">
+                  
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+    `;
+    console.log(html);
+    console.log(data);
+  } catch (err) {
+    console.error(err);
+  }
+};
 
 //rendering all the countries
 const renderAllCountries = async function () {
@@ -23,69 +172,14 @@ const renderAllCountries = async function () {
     // console.log(sortedCountries);
 
     sortedCountries.forEach(eachCountry => {
-      const html = `<div class="shadow-xl w-full md:w-64 pb-8 bg-dmtlme">
-    <div class="w-full h-3/5">
-      <img src="${
-        eachCountry.flags.png
-      }" alt="country flag" class="w-full h-full" />
-    </div>
-
-    <h3 class="py-3 text-xl font-extrabold pl-4">${eachCountry.name.common}</h3>
-    <p class="font-bold pl-4">
-      Population: <span class="font-normal">${eachCountry.population.toLocaleString()}</span>
-    </p>
-    <p class="font-bold pl-4">
-      Region: <span class="font-normal">${eachCountry.region}</span>
-    </p>
-    <p class="font-bold pl-4">
-      Capital: <span class="font-normal">${eachCountry.capital}</span>
-    </p>
-  </div>`;
-      countryContainer.insertAdjacentHTML('beforeend', html);
+      // render all countries HTML
+      renderHtml(eachCountry);
     });
   } catch (err) {
     console.error(err);
   }
 };
 renderAllCountries();
-
-// testing data by rendering a single country first
-// const renderSingleCountry = async function (country) {
-//   try {
-//     const myCountry = await fetch(
-//       `https://restcountries.com/v3.1/name/${country}`
-//     );
-//     if (!myCountry.ok) throw new error('Country not Found');
-
-//     const [myCountryData] = await myCountry.json();
-//     // console.log(myCountryData);
-//     const html = `<div class="shadow-xl w-full md:w-64 pb-8 bg-dmtlme">
-//     <div class="w-full h-3/5 object-cover">
-//       <img src="${
-//         myCountryData.flags.png
-//       }" alt="mexico flag" class="w-full h-full object-cover" />
-//     </div>
-
-//     <h3 class="py-3 text-xl font-extrabold pl-4">${
-//       myCountryData.name.common
-//     }</h3>
-//     <p class="font-bold pl-4">
-//       Population: <span class="font-normal">${myCountryData.population.toLocaleString()}</span>
-//     </p>
-//     <p class="font-bold pl-4">
-//       Region: <span class="font-normal">${myCountryData.region}</span>
-//     </p>
-//     <p class="font-bold pl-4">
-//       Capital: <span class="font-normal">${myCountryData.capital}</span>
-//     </p>
-//   </div>`;
-
-//     countryContainer.insertAdjacentHTML('beforeend', html);
-//   } catch (err) {
-//     console.error(err);
-//   }
-// };
-// renderSingleCountry(searchEl.value);
 
 // DISPLAYING COUNTRIES BY REGIONS
 filterRegion.addEventListener('change', async function (e) {
@@ -115,28 +209,8 @@ async function fetchData(selectedValue) {
     .sort((a, b) => a.name.common.localeCompare(b.name.common));
 
   sortedRegions.forEach(eachRegion => {
-    const html = `<div class="shadow-xl w-full md:w-64 pb-8 bg-dmtlme">
-      <div class="w-full h-3/5">
-        <img src="${
-          eachRegion.flags.png
-        }" alt="country flag" class="w-full h-full" />
-      </div>
-  
-      <h3 class="py-3 text-xl font-extrabold pl-4">${
-        eachRegion.name.common
-      }</h3>
-      <p class="font-bold pl-4">
-        Population: <span class="font-normal">${eachRegion.population.toLocaleString()}</span>
-      </p>
-      <p class="font-bold pl-4">
-        Region: <span class="font-normal">${eachRegion.region}</span>
-      </p>
-      <p class="font-bold pl-4">
-        Capital: <span class="font-normal">${eachRegion.capital}</span>
-      </p>
-    </div>`;
-
-    countryContainer.insertAdjacentHTML('beforeend', html);
+    // render the regions
+    renderHtml(eachRegion);
   });
   console.log(sortedRegions);
   // return sortedRegions;
@@ -147,29 +221,58 @@ darkBtn.addEventListener('click', function () {
   console.log('i am batman');
 });
 
-// filterRegion.addEventListener('change', async event => {
-//   // Extract the selected value from the event
-//   const selectedValue = event.target.value;
+//FILTERING COUNTRY BY SEARCH
+const searchCountry = async function (search) {
+  try {
+    const response = await fetch(
+      `https://restcountries.com/v3.1/name/${search}`
+    );
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    const data = await response.json();
+    console.log(data);
+    return data;
+  } catch (err) {
+    console.error(err);
+  }
+};
 
-//   // Call your API function with the selected value as a parameter
-//   try {
-//     const data = await fetchData(selectedValue);
-//     // console.log('API Response:', data);
-//   } catch (error) {
-//     console.error('API Error:', error);
-//   }
-// });
+const displayResults = function (results) {
+  countryContainer.innerHTML = '';
 
-// Async function to make the API call with a parameter
-// async function fetchData(selectedValue) {
-//   const url = `https:restcountries.com/v3.1/region/${selectedValue}`;
+  if (results === '') {
+    countryContainer.innerHTML = 'No results found.';
+  } else {
+    renderHtml(results);
+    //   const html = `<div class="shadow-xl w-full md:w-64 pb-8 bg-dmtlme">
+    //   <div class="w-full h-3/5">
+    //     <img src="${
+    //       results.flags.png
+    //     }" alt="country flag" class="w-full h-full" />
+    //   </div>
 
-//   const response = await fetch(url);
+    //   <h3 class="py-3 text-xl font-extrabold pl-4">${results.name.common}</h3>
+    //   <p class="font-bold pl-4">
+    //     Population: <span class="font-normal">${results.population.toLocaleString()}</span>
+    //   </p>
+    //   <p class="font-bold pl-4">
+    //     Region: <span class="font-normal">${results.region}</span>
+    //   </p>
+    //   <p class="font-bold pl-4">
+    //     Capital: <span class="font-normal">${results.capital}</span>
+    //   </p>
+    // </div>`;
+    //   countryContainer.insertAdjacentHTML('beforeend', html);
+  }
+};
 
-//   if (!response.ok) {
-//     throw new Error('API request failed');
-//   }
-
-//   const data = await response.json();
-//   return data;
-// }
+searchEl.addEventListener('keydown', async function (e) {
+  if (e.key === 'Enter') {
+    const searchTerm = searchEl.value;
+    if (searchTerm) {
+      const [apiData] = await searchCountry(searchTerm);
+      displayResults(apiData);
+    }
+  }
+});
