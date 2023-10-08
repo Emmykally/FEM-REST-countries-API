@@ -1,8 +1,8 @@
-'use script';
+'use strict';
 
 const searchEl = document.querySelector('#search-country');
 const countryContainer = document.querySelector('#country-container');
-const backButton = document.querySelector('#back-button');
+// const backButton = document.querySelector('#back-button');
 const countryDetailsSection = document.querySelector('#country-details');
 const flagDisplaySection = document.querySelector('#flag-display');
 const filterRegion = document.querySelector('#filter');
@@ -78,9 +78,17 @@ const clickedCountryBox = async function (countryName) {
       return countryCurrency ? money.currencies[countryCurrency].name : null;
     }
     const officialCurrencyName = getCurrency(data);
+
+    //GET COUNTRY LANGUAGES
+    function getLanguage(lang) {
+      const language = Object.keys(lang.languages);
+      const countryLanguage = language[0];
+      return countryLanguage ? lang.languages[countryLanguage] : null;
+    }
+    const officialLanguage = getLanguage(data);
     const html = `
     <div>
-          <button class="px-8 py-1 bg-lmi mb-4" id="back-button">Back</button>
+          <button class="px-8 py-1 bg-lmi mb-4" id="back-button" data-back-btn>Back</button>
 
           <div class="flex md:flex-row flex-col items-center">
             <div class="w-full md:w-1/2">
@@ -126,7 +134,7 @@ const clickedCountryBox = async function (countryName) {
                   </p>
                   <p class="font-bold md:pl-4 py-2 md:py-1">
                     Languages:
-                    <span class="font-normal">${data.languages}</span>
+                    <span class="font-normal">${officialLanguage}</span>
                   </p>
                 </div>
               </div>
@@ -137,13 +145,13 @@ const clickedCountryBox = async function (countryName) {
 
                 <div class="flex">
                   <p class="font-normal px-4 py-1 shadow-lg cursor-pointer">
-                    
+                    ${data.borders[0]}
                   </p>
                   <p class="font-normal px-4 py-1 shadow-lg cursor-pointer">
-                  
+                  ${data.borders[1]}
                   </p>
                   <p class="font-normal px-4 py-1 shadow-lg cursor-pointer">
-                  
+                  ${data.borders[2]}
                   </p>
                 </div>
               </div>
@@ -151,8 +159,24 @@ const clickedCountryBox = async function (countryName) {
           </div>
         </div>
     `;
+    countryContainer.innerHTML = '';
+    flagDisplaySection.classList.add('hidden');
+    detailsContainer.classList.remove('hidden');
+    detailsContainer.insertAdjacentHTML('beforeend', html);
     console.log(html);
     console.log(data);
+
+    const backButton = detailsContainer.querySelector(`[data-back-btn]`);
+    const goBack = document.querySelector('#back-button');
+    backButton.addEventListener('click', function (e) {
+      // if (flagDisplaySection.classList.contains('hidden')) {
+
+      // }
+      detailsContainer.classList.add('hidden');
+      flagDisplaySection.classList.remove('hidden');
+      renderAllCountries();
+      detailsContainer.innerHTML = '';
+    });
   } catch (err) {
     console.error(err);
   }
