@@ -31,7 +31,7 @@ Users should be able to:
 ### Links
 
 - Solution URL: [Add solution URL here](https://github.com/Emmykally/FEM-REST-countries-API.git)
-- Live Site URL: [Add live site URL here](https://emmykally-easybank.netlify.app/)
+- Live Site URL: [Add live site URL here](https://emmykally-restcountriesapi.netlify.app/)
 
 ## My process
 
