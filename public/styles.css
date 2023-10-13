@@ -734,6 +734,11 @@ video {
   padding-bottom: 1rem;
 }
 
+.px-6{
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
 .pb-8{
   padding-bottom: 2rem;
 }
@@ -769,6 +774,11 @@ video {
   line-height: 1.75rem;
 }
 
+.text-base{
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
 .font-bold{
   font-weight: 700;
 }
@@ -779,6 +789,11 @@ video {
 
 .font-normal{
   font-weight: 400;
+}
+
+.text-black{
+  --tw-text-opacity: 1;
+  color: rgb(0 0 0 / var(--tw-text-opacity));
 }
 
 .shadow-lg{
@@ -808,21 +823,64 @@ video {
   }
 }
 
-@media (prefers-color-scheme: dark){
-  .dark-body{
-    --tw-bg-opacity: 1;
-    background-color: hsl(207 26% 17% / var(--tw-bg-opacity));
-  }
+:is(.dark .dark-body){
+  --tw-bg-opacity: 1;
+  background-color: hsl(207 26% 17% / var(--tw-bg-opacity));
+}
 
-  .dark-panels{
-    --tw-bg-opacity: 1;
-    background-color: hsl(209 23% 22% / var(--tw-bg-opacity));
-  }
+:is(.dark .dark-panels){
+  --tw-bg-opacity: 1;
+  background-color: hsl(209 23% 22% / var(--tw-bg-opacity));
+}
 
-  .dark-text{
-    --tw-text-opacity: 1;
-    color: hsl(0 0% 100% / var(--tw-text-opacity));
-  }
+:is(.dark .dark-text){
+  --tw-text-opacity: 1;
+  color: hsl(0 0% 100% / var(--tw-text-opacity));
+}
+
+:is(.dark .dark\:bg-black){
+  --tw-bg-opacity: 1;
+  background-color: rgb(0 0 0 / var(--tw-bg-opacity));
+}
+
+:is(.dark .dark\:bg-dbb){
+  --tw-bg-opacity: 1;
+  background-color: hsl(207 26% 17% / var(--tw-bg-opacity));
+}
+
+:is(.dark .dark\:bg-dbe){
+  --tw-bg-opacity: 1;
+  background-color: hsl(209 23% 22% / var(--tw-bg-opacity));
+}
+
+:is(.dark .dark\:text-white){
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
+:is(.dark .dark\:text-dmtlme){
+  --tw-text-opacity: 1;
+  color: hsl(0 0% 100% / var(--tw-text-opacity));
+}
+
+:is(.dark .dark\:text-dbe){
+  --tw-text-opacity: 1;
+  color: hsl(209 23% 22% / var(--tw-text-opacity));
+}
+
+:is(.dark .dark\:text-lmb){
+  --tw-text-opacity: 1;
+  color: hsl(0 0% 90% / var(--tw-text-opacity));
+}
+
+:is(.dark .dark\:text-lmi){
+  --tw-text-opacity: 1;
+  color: hsl(0 0% 52% / var(--tw-text-opacity));
+}
+
+:is(.dark .dark\:text-lmt){
+  --tw-text-opacity: 1;
+  color: hsl(200 15% 8% / var(--tw-text-opacity));
 }
 
 @media (min-width: 768px){
@@ -868,7 +926,17 @@ video {
     padding-bottom: 0.25rem;
   }
 
+  .md\:px-12{
+    padding-left: 3rem;
+    padding-right: 3rem;
+  }
+
   .md\:pl-4{
     padding-left: 1rem;
+  }
+
+  .md\:text-lg{
+    font-size: 1.125rem;
+    line-height: 1.75rem;
   }
 }

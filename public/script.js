@@ -9,10 +9,16 @@ const filterRegion = document.querySelector('#filter');
 const darkBtn = document.querySelector('#dark-mode');
 const headerText = document.querySelector('#header-text');
 const detailsContainer = document.querySelector('#country-details');
+const lightIcon = document.querySelector('#light-icon');
+const darkIcon = document.querySelector('dark-icon');
+
+//THEME VARS
+const userTheme = localStorage.getItem('theme');
+const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
 // COUNTRY HTML
 const renderHtml = function (country) {
-  const html = `<div class=" shadow-xl w-full md:w-64 pb-8 bg-dmtlme" data-country-name="${
+  const html = `<div class=" dark:text-white text-black shadow-xl w-full md:w-64 pb-8 bg-dmtlme dark:bg-dbe" data-country-name="${
     country.name.common
   }">
   <div class="w-full h-3/5">
@@ -23,13 +29,13 @@ const renderHtml = function (country) {
     country.name.common
   }</h3>
   <p class="font-bold pl-4">
-    Population: <span class="font-normal">${country.population.toLocaleString()}</span>
+    Population: <span class="font-normal dark:text-lmi">${country.population.toLocaleString()}</span>
   </p>
   <p class="font-bold pl-4">
-    Region: <span class="font-normal">${country.region}</span>
+    Region: <span class="font-normal dark:text-lmi">${country.region}</span>
   </p>
   <p class="font-bold pl-4">
-    Capital: <span class="font-normal">${country.capital}</span>
+    Capital: <span class="font-normal dark:text-lmi">${country.capital}</span>
   </p>
 </div>`;
   countryContainer.insertAdjacentHTML('beforeend', html);
@@ -87,7 +93,7 @@ const clickedCountryBox = async function (countryName) {
     }
     const officialLanguage = getLanguage(data);
     const html = `
-    <div>
+    <div class="mt-6 mx-6 md:mx-12 text-black ">
           <button class="px-8 py-1 bg-lmi mb-4" id="back-button" data-back-btn>Back</button>
 
           <div class="flex md:flex-row flex-col items-center">
@@ -99,48 +105,52 @@ const clickedCountryBox = async function (countryName) {
               />
             </div>
             <div class="h-1/2">
-              <h3 class="py-3 text-4xl font-extrabold md:pl-4">${
+              <h3 class="py-3 text-4xl font-extrabold md:pl-4 dark:text-dmtlme">${
                 data.name.common
               }</h3>
 
               <div class="flex md:flex-row flex-col justify-center">
                 <div>
-                  <p class="font-bold md:pl-4 py-2 md:py-1">
-                    Native Name: <span class="font-normal">${officialNativeName}</span>
+                  <p class="font-bold md:pl-4 py-2 md:py-1 dark:text-dmtlme">
+                    Native Name: <span class="font-normal dark:text-lmi">${officialNativeName}</span>
                   </p>
-                  <p class="font-bold md:pl-4 py-2 md:py-1">
-                    Population: <span class="font-normal">${data.population.toLocaleString()}</span>
+                  <p class="font-bold md:pl-4 py-2 md:py-1 dark:text-dmtlme">
+                    Population: <span class="font-normal dark:text-lmi">${data.population.toLocaleString()}</span>
                   </p>
-                  <p class="font-bold md:pl-4 py-2 md:py-1">
-                    Region: <span class="font-normal">${data.region}</span>
+                  <p class="font-bold md:pl-4 py-2 md:py-1 dark:text-dmtlme">
+                    Region: <span class="font-normal dark:text-lmi">${
+                      data.region
+                    }</span>
                   </p>
-                  <p class="font-bold md:pl-4 py-2 md:py-1">
-                    Sub Region: <span class="font-normal">${
+                  <p class="font-bold md:pl-4 py-2 md:py-1 dark:text-dmtlme">
+                    Sub Region: <span class="font-normal dark:text-lmi">${
                       data.subregion
                     }</span>
                   </p>
-                  <p class="font-bold md:pl-4 py-2 md:py-1">
-                    Capital: <span class="font-normal">${data.capital}</span>
+                  <p class="font-bold md:pl-4 py-2 md:py-1 dark:text-dmtlme">
+                    Capital: <span class="font-normal dark:text-lmi">${
+                      data.capital
+                    }</span>
                   </p>
                 </div>
                 <div class="mt-8 md:mt-0">
-                  <p class="font-bold md:pl-4 py-2 md:py-1">
-                    Top Level Domain: <span class="font-normal">${
+                  <p class="font-bold md:pl-4 py-2 md:py-1 dark:text-dmtlme">
+                    Top Level Domain: <span class="font-normal dark:text-lmi">${
                       data.tld
                     }</span>
                   </p>
-                  <p class="font-bold md:pl-4 py-2 md:py-1">
-                    Currencies: <span class="font-normal">${officialCurrencyName}</span>
+                  <p class="font-bold md:pl-4 py-2 md:py-1 dark:text-dmtlme">
+                    Currencies: <span class="font-normal dark:text-lmi">${officialCurrencyName}</span>
                   </p>
-                  <p class="font-bold md:pl-4 py-2 md:py-1">
+                  <p class="font-bold md:pl-4 py-2 md:py-1 dark:text-dmtlme">
                     Languages:
-                    <span class="font-normal">${officialLanguage}</span>
+                    <span class="font-normal dark:text-lmi">${officialLanguage}</span>
                   </p>
                 </div>
               </div>
               <div class="flex md:flex-row flex-col mt-8 md:mt-16">
                 <div>
-                  <p class="font-bold md:pl-4">Border Countries:</p>
+                  <p class="font-bold md:pl-4 dark:text-dmtlme">Border Countries:</p>
                 </div>
 
                 <div class="flex">
@@ -240,11 +250,6 @@ async function fetchData(selectedValue) {
   // return sortedRegions;
 }
 
-// DARK MODE THEME
-darkBtn.addEventListener('click', function () {
-  console.log('i am batman');
-});
-
 //FILTERING COUNTRY BY SEARCH
 const searchCountry = async function (search) {
   try {
@@ -299,4 +304,36 @@ searchEl.addEventListener('keydown', async function (e) {
       displayResults(apiData);
     }
   }
+});
+
+// DARK MODE THEME
+const iconToggle = function () {
+  lightIcon.classList.toggle('hidden');
+  darkIcon.classList.toggle('hidden');
+};
+
+const themeCheck = function () {
+  if (userTheme === 'dark' || (!userTheme && systemTheme)) {
+    document.documentElement.classList.add('dark');
+    darkIcon.classList.add('hidden');
+    return;
+  }
+  lightIcon.classList.add('hidden');
+};
+
+const themeSwitch = function () {
+  if (document.documentElement.classList.contains('dark')) {
+    document.documentElement.classList.remove('dark');
+    localStorage.setItem('theme', 'dark');
+    iconToggle();
+    return;
+  }
+  document.documentElement.classList.add('dark');
+  localStorage.setItem('theme', 'dark');
+  iconToggle();
+};
+
+darkBtn.addEventListener('click', function () {
+  // document.documentElement.classList.toggle('dark');
+  themeSwitch();
 });
